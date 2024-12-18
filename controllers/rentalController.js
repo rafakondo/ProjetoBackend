@@ -8,7 +8,7 @@ exports.createRental = (req, res) => {
     }
 
     const newRental = rentalModel.createRental({ idCarro, idUser });
-    res.status(201).json(newRental);
+    res.status(201).json({newRental, message: "Aluguel Criado!"});
 };
 
 exports.getAllRentals = (req, res) => {
@@ -16,7 +16,7 @@ exports.getAllRentals = (req, res) => {
         ? rentalModel.getAllRentals()
         : rentalModel.getAllRentals().filter(rental => rental.idUser === req.user.id);
 
-    res.status(200).json(rentals);
+    res.status(200).json({rentals, message: "Listagem de todos Alugueis"});
 };
 
 exports.getRentalById = (req, res) => {
@@ -30,7 +30,7 @@ exports.getRentalById = (req, res) => {
         return res.status(403).json({ message: 'Acesso negado.' });
     }
 
-    res.status(200).json(rental);
+    res.status(200).json({rental, message: "Aluguel Encontrado!"});
 };
 
 exports.updateRental = (req, res) => {
@@ -45,7 +45,7 @@ exports.updateRental = (req, res) => {
     }
 
     const updatedRental = rentalModel.updateRental(parseInt(req.params.id, 10), req.body);
-    res.status(200).json(updatedRental);
+    res.status(200).json({updatedRental, message: "Aluguel Atualizado!"});
 };
 
 exports.deleteRental = (req, res) => {

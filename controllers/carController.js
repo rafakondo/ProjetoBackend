@@ -8,13 +8,13 @@ exports.createCar = (req, res) => {
     }
 
     const newCar = carModel.createCar({ marca, modelo, placa, preco });
-    res.status(201).json(newCar);
+    res.status(201).json({newCar, message: "Carro Criado!"});
 };
 
 exports.getAllCars = (req, res) => {
     const cars = carModel.getAllCars();
 
-    res.status(200).json(cars);
+    res.status(200).json({cars, message: "Listagem de todos os Carros"});
 };
 
 exports.getCarById = (req, res) => {
@@ -24,7 +24,7 @@ exports.getCarById = (req, res) => {
         return res.status(404).json({ message: 'Carro não encontrado.' });
     }
 
-    res.status(200).json(car);
+    res.status(200).json({car, message: "Carro Encontrado!"});
 };
 
 exports.updateCar = (req, res) => {
@@ -34,7 +34,7 @@ exports.updateCar = (req, res) => {
         return res.status(404).json({ message: 'Carro não encontrado.' });
     }
 
-    res.status(200).json(updatedCar);
+    res.status(200).json({updatedCar, message: "Carro Atualizado!"});
 };
 
 exports.deleteCar = (req, res) => {
@@ -44,5 +44,5 @@ exports.deleteCar = (req, res) => {
         return res.status(404).json({ message: 'Carro não encontrado.' });
     }
 
-    res.status(200).json(deletedCar);
+    res.status(200).json({deletedCar, message:"Carro deletado!"});
 };
