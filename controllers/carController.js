@@ -1,4 +1,4 @@
-const carModel = require('../models/carModel');
+const carService = require('../services/carService');
 
 exports.createCar = (req, res) => {
     const { marca, modelo, placa, preco } = req.body;
@@ -7,18 +7,18 @@ exports.createCar = (req, res) => {
         return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
     }
 
-    const newCar = carModel.createCar({ marca, modelo, placa, preco });
+    const newCar = carService.createCar({ marca, modelo, placa, preco });
     res.status(201).json({newCar, message: "Carro Criado!"});
 };
 
 exports.getAllCars = (req, res) => {
-    const cars = carModel.getAllCars();
+    const cars = carService.getAllCars();
 
     res.status(200).json({cars, message: "Listagem de todos os Carros"});
 };
 
 exports.getCarById = (req, res) => {
-    const car = carModel.getCarById(parseInt(req.params.id, 10));
+    const car = carService.getCarById(parseInt(req.params.id, 10));
 
     if (!car) {
         return res.status(404).json({ message: 'Carro não encontrado.' });
@@ -28,7 +28,7 @@ exports.getCarById = (req, res) => {
 };
 
 exports.updateCar = (req, res) => {
-    const updatedCar = carModel.updateCar(parseInt(req.params.id, 10), req.body);
+    const updatedCar = carService.updateCar(parseInt(req.params.id, 10), req.body);
 
     if (!updatedCar) {
         return res.status(404).json({ message: 'Carro não encontrado.' });
@@ -38,7 +38,7 @@ exports.updateCar = (req, res) => {
 };
 
 exports.deleteCar = (req, res) => {
-    const deletedCar = carModel.deleteCar(parseInt(req.params.id, 10));
+    const deletedCar = carService.deleteCar(parseInt(req.params.id, 10));
 
     if (!deletedCar) {
         return res.status(404).json({ message: 'Carro não encontrado.' });
