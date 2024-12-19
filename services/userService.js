@@ -1,6 +1,7 @@
 const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 
+//Login do usuário
 exports.login = (username, password) => {
     const user = userModel.getAllUsers().find(u => u.username === username && u.password === password);
     if (!user) return null;
