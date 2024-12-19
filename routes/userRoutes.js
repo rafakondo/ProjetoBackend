@@ -8,10 +8,11 @@ const router = express.Router();
 // Rota pública
 router.post('/login', userController.login);
 router.get('/install', userController.install);
+router.post('/user', authenticateToken, validateUser, userController.createUser);
+router.get('/', authenticateToken, userController.getAllUsers);
 
 // Rotas protegidas
 router.post('/admin', authenticateToken, isAdmin, validateUser, userController.createAdmin);
-router.get('/', authenticateToken, userController.getAllUsers);
 router.put('/:id', authenticateToken, userController.updateUser);
 router.delete('/:id', authenticateToken, isAdmin, userController.deleteUser);
 

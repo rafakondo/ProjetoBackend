@@ -1,6 +1,7 @@
 require('dotenv').config();
 const userService = require('../services/userService');
 
+//Criação de administradores
 exports.createAdmin = (req, res) => {
     const { username, password, email, nome, idade } = req.body;
 
@@ -12,6 +13,7 @@ exports.createAdmin = (req, res) => {
     res.status(201).json({ message: 'Administrador criado com sucesso!', admin });
 };
 
+//Login para a conta
 exports.login = (req, res) => {
     const { username, password } = req.body;
     const token = userService.login(username, password);
@@ -22,6 +24,7 @@ exports.login = (req, res) => {
     res.status(200).json({ message: 'Login realizado com sucesso!', token });
 };
 
+//Criação de usuário e administrador padrão
 exports.install = (req, res) => {
     const existingAdmin = userService.getAllUsers().find(u => u.username === 'admin');
     if (existingAdmin) {
@@ -48,11 +51,13 @@ exports.install = (req, res) => {
     res.status(201).json({ message: 'Usuários padrão criados com sucesso!' });
 };
 
+//Consultar todos os usuários
 exports.getAllUsers = (req, res) => {
     const users = userService.getAllUsers();
     res.status(200).json({ message: 'Usuários listados com sucesso!', users });
 };
 
+//Consultar usuário por id
 exports.getUserById = (req, res) => {
     const user = userService.getUserById(parseInt(req.params.id, 10));
 
@@ -63,6 +68,7 @@ exports.getUserById = (req, res) => {
     res.status(200).json({ message: 'Usuário encontrado com sucesso!', user });
 };
 
+//Criar usuário
 exports.createUser = (req, res) => {
     const { username, password, email, nome, idade } = req.body;
 
@@ -74,6 +80,7 @@ exports.createUser = (req, res) => {
     res.status(201).json({ message: 'Usuário cadastrado com sucesso!', newUser });
 };
 
+//Atualizar usuário
 exports.updateUser = (req, res) => {
     const userId = parseInt(req.params.id, 10);
     const user = userService.getUserById(userId);
@@ -90,6 +97,7 @@ exports.updateUser = (req, res) => {
     res.status(200).json({ message: 'Usuário atualizado com sucesso!', updatedUser });
 };
 
+//Deletar usuário
 exports.deleteUser = (req, res) => {
     const userId = parseInt(req.params.id, 10);
     const user = userService.getUserById(userId);
