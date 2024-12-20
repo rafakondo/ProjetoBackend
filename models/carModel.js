@@ -1,7 +1,23 @@
-// Armazena a lista de carros
-const cars = [];
+const fs = require('fs');
+const path = require('path');
 
-let id = 1;
+// Caminho do arquivo JSON
+const filePath = path.join(__dirname, '../data/cars.json');
+
+// Inicializa o arquivo JSON se não existir
+if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, JSON.stringify([], null, 2));
+}
+
+// Carrega os usuários do arquivo JSON
+const cars = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+let id = cars.length > 0 ? Math.max(...cars.map(user => user.id)) + 1 : 1;
+
+// Salva os dados no arquivo JSON
+const saveToFile = () => {
+    fs.writeFileSync(filePath, JSON.stringify(cars, null, 2));
+};
 
 // Retorna todos os carros
 exports.getAllCars = () => cars;
@@ -15,6 +31,7 @@ exports.createCar = (car) => {
     cars.push(newCar);
 
     id++;
+    saveToFile();
 
     return newCar;
 };
@@ -30,6 +47,8 @@ exports.updateCar = (id, updatedCar) => {
     // Sobrescreve as chaves presentes em updatedCar
     cars[index] = { ...cars[index], ...updatedCar };
 
+    saveToFile();
+
     return cars[index];
 };
 
@@ -41,6 +60,9 @@ exports.deleteCar = (id) => {
         return null;
     }
 
+    const deletedCar = cars.splice(index, 1)[0];
+    saveToFile();
+
     // Retorna o carro deletado e o remove do array
-    return cars.splice(index, 1)[0];
+    return deletedCar;
 };

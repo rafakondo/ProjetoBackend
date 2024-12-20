@@ -46,7 +46,8 @@ exports.getRentalById = (req, res) => {
 
 // Atualiza um aluguel
 exports.updateRental = (req, res) => {
-    const rental = rentalService.getRentalById(parseInt(req.params.id, 10));
+    const rentalId = parseInt(req.params.id, 10);
+    const rental = rentalService.getRentalById(rentalId);
 
     if (!rental) {
         return res.status(404).json({ message: 'Aluguel não encontrado.' });
@@ -56,8 +57,15 @@ exports.updateRental = (req, res) => {
         return res.status(403).json({ message: 'Acesso negado.' });
     }
 
-    const updatedRental = rentalService.updateRental(parseInt(req.params.id, 10), req.body);
-    res.status(200).json({updatedRental, message: "Aluguel Atualizado!"});
+    const updatedData = req.body;
+
+    // Verifica se há algum campo para atualização
+    if (!updatedData || Object.keys(updatedData).length === 0) {
+        return res.status(400).json({ message: 'Nenhuma alteração fornecida. Por favor, adicione dados para atualização.' });
+    }
+
+    const updatedRental = rentalService.updateRental(rentalId, updatedData);
+    res.status(200).json({ updatedRental, message: 'Aluguel atualizado!' });
 };
 
 // Deleta um aluguel
