@@ -16,6 +16,12 @@ exports.createAdmin = (req, res) => {
 //Login para a conta
 exports.login = (req, res) => {
     const { username, password } = req.body;
+
+    // Verificar se os campos username e password estão presentes
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Os campos username e password são obrigatórios.' });
+    }
+
     const token = userService.login(username, password);
 
     if (!token) {
@@ -112,6 +118,12 @@ exports.createUser = (req, res) => {
 exports.updateUser = (req, res) => {
     const userId = parseInt(req.params.id, 10);
     const user = userService.getUserById(userId);
+    const updatedData = req.body;
+
+     // Verifica se há algum campo para atualização
+     if (!updatedData || Object.keys(updatedData).length === 0) {
+        return res.status(400).json({ message: 'Nenhuma alteração fornecida. Por favor, adicione dados para atualização.' });
+    }
 
     if (!user) {
         return res.status(404).json({ message: 'Usuário não encontrado.' });
