@@ -21,3 +21,9 @@ exports.createCar = (car) => carModel.createCar(car);
 exports.updateCar = (id, updatedCar) => carModel.updateCar(id, updatedCar);
 
 exports.deleteCar = (id) => carModel.deleteCar(id);
+
+// Realiza chama no carModel que iguala as letras maiusculas com minusculas
+exports.getCarsByModel = (model) => {
+    const cars = carModel.getAllCars();
+    return cars.filter(car => car.modelo.toLowerCase() === model.toLowerCase());
+};

@@ -1,5 +1,6 @@
 const carService = require('../services/carService');
 
+// Cria um carro
 exports.createCar = (req, res) => {
     const { marca, modelo, placa, preco } = req.body;
 
@@ -11,6 +12,7 @@ exports.createCar = (req, res) => {
     res.status(201).json({newCar, message: "Carro Criado!"});
 };
 
+// Mostra todos os carros
 exports.getAllCars = (req, res) => {
     const limit = parseInt(req.query.limite, 10);
     const page = parseInt(req.query.pagina, 10);
@@ -27,6 +29,7 @@ exports.getAllCars = (req, res) => {
     }
 };
 
+// Mostra somente o carro do ID
 exports.getCarById = (req, res) => {
     const car = carService.getCarById(parseInt(req.params.id, 10));
 
@@ -37,6 +40,7 @@ exports.getCarById = (req, res) => {
     res.status(200).json({car, message: "Carro Encontrado!"});
 };
 
+// Atualiza um carro
 exports.updateCar = (req, res) => {
     const updatedCar = carService.updateCar(parseInt(req.params.id, 10), req.body);
 
@@ -47,6 +51,7 @@ exports.updateCar = (req, res) => {
     res.status(200).json({updatedCar, message: "Carro Atualizado!"});
 };
 
+// Deleta um carro
 exports.deleteCar = (req, res) => {
     const deletedCar = carService.deleteCar(parseInt(req.params.id, 10));
 
@@ -55,4 +60,21 @@ exports.deleteCar = (req, res) => {
     }
 
     res.status(200).json({deletedCar, message:"Carro deletado!"});
+};
+
+// Filtra todos os carros por modelo
+exports.getCarsByModel = (req, res) => {
+    const model = req.query.modelo;
+
+    if (!model) {
+        return res.status(400).json({ message: 'O parâmetro "modelo" é obrigatório.' });
+    }
+
+    const cars = carService.getCarsByModel(model);
+
+    if (cars.length === 0) {
+        return res.status(404).json({ message: `Nenhum carro encontrado para o modelo "${model}".` });
+    }
+
+    res.status(200).json(cars);
 };
