@@ -14,6 +14,6 @@ router.get('/', authenticateToken, userController.getAllUsers);
 // Rotas protegidas
 router.post('/admin', authenticateToken, isAdmin, validateUser, userController.createAdmin);
 router.put('/:id', authenticateToken, userController.updateUser);
-router.delete('/:id', authenticateToken, isAdmin, userController.deleteUser);
+router.delete('/:id', authenticateToken, userController.deleteUser);
 
 module.exports = router;
