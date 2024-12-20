@@ -53,10 +53,38 @@ exports.install = (req, res) => {
 
 //Consultar todos os usuários
 exports.getAllUsers = (req, res) => {
-    const users = userService.getAllUsers();
-    res.status(200).json({ message: 'Usuários listados com sucesso!', users });
-};
+    const { limite = 10, pagina = 1 } = req.query;
 
+    // Valida os valores permitidos para 'limite'
+    const limitePermitido = [5, 10, 30];
+    const limiteNumero = parseInt(limite, 10);
+    const paginaNumero = parseInt(pagina, 10);
+
+    if (!limitePermitido.includes(limiteNumero)) {
+        return res.status(400).json({ 
+            message: `O limite deve ser um dos seguintes valores: ${limitePermitido.join(', ')}` 
+        });
+    }
+
+    if (paginaNumero < 1) {
+        return res.status(400).json({ 
+            message: 'A página deve ser um número inteiro maior ou igual a 1.' 
+        });
+    }
+
+    // Recupera os usuários e aplica a paginação
+    const allUsers = userService.getAllUsers();
+    const inicio = (paginaNumero - 1) * limiteNumero;
+    const usuariosPaginados = allUsers.slice(inicio, inicio + limiteNumero);
+
+    res.status(200).json({ 
+        message: 'Usuários listados com sucesso!', 
+        pagina: paginaNumero, 
+        limite: limiteNumero, 
+        total: allUsers.length, 
+        usuarios: usuariosPaginados 
+    });
+};
 //Consultar usuário por id
 exports.getUserById = (req, res) => {
     const user = userService.getUserById(parseInt(req.params.id, 10));

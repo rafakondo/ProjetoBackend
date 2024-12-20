@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/login', userController.login);
 router.get('/install', userController.install);
 router.post('/user', authenticateToken, validateUser, userController.createUser);
-router.get('/', authenticateToken, userController.getAllUsers);
+router.get('/', userController.getAllUsers);
 
 // Rotas protegidas
 router.post('/admin', authenticateToken, isAdmin, validateUser, userController.createAdmin);
