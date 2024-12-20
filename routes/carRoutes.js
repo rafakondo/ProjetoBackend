@@ -11,6 +11,7 @@ router.post('/', validateCar, authenticateToken, isAdmin, carController.createCa
 router.get('/', authenticateToken, carController.getAllCars);                       // exemplo de requisição /cars?limite=5&pagina=2
 router.put('/:id', authenticateToken, isAdmin, carController.updateCar);
 router.delete('/:id', authenticateToken, isAdmin, carController.deleteCar);
+router.get('/filter', authenticateToken, carController.getCarsByModel);             // exemplo de requisição /filter?modelo=civic
 router.get('/:id', validateCarId, authenticateToken, carController.getCarById);
 
 module.exports = router;

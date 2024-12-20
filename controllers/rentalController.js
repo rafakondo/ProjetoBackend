@@ -1,5 +1,6 @@
 const rentalService = require('../services/rentalService');
 
+// Cria um aluguel
 exports.createRental = (req, res) => {
     const { idCarro, idUser } = req.body;
 
@@ -11,6 +12,7 @@ exports.createRental = (req, res) => {
     res.status(201).json({newRental, message: "Aluguel Criado!"});
 };
 
+// Mostra todos alugueis
 exports.getAllRentals = (req, res) => {
     const limit = parseInt(req.query.limite, 10);
     const page = parseInt(req.query.pagina, 10);
@@ -27,6 +29,7 @@ exports.getAllRentals = (req, res) => {
     }
 };
 
+// Mostra o aluguel pelo ID
 exports.getRentalById = (req, res) => {
     const rental = rentalService.getRentalById(parseInt(req.params.id, 10));
 
@@ -41,6 +44,7 @@ exports.getRentalById = (req, res) => {
     res.status(200).json({rental, message: "Aluguel Encontrado!"});
 };
 
+// Atualiza um aluguel
 exports.updateRental = (req, res) => {
     const rental = rentalService.getRentalById(parseInt(req.params.id, 10));
 
@@ -56,6 +60,7 @@ exports.updateRental = (req, res) => {
     res.status(200).json({updatedRental, message: "Aluguel Atualizado!"});
 };
 
+// Deleta um aluguel
 exports.deleteRental = (req, res) => {
     const rental = rentalService.getRentalById(parseInt(req.params.id, 10));
 
