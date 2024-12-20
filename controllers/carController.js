@@ -42,13 +42,20 @@ exports.getCarById = (req, res) => {
 
 // Atualiza um carro
 exports.updateCar = (req, res) => {
-    const updatedCar = carService.updateCar(parseInt(req.params.id, 10), req.body);
+    const updatedData = req.body;
+
+    // Verifica se há algum campo para atualização
+    if (!updatedData || Object.keys(updatedData).length === 0) {
+        return res.status(400).json({ message: 'Nenhuma alteração fornecida. Por favor, adicione dados para atualização.' });
+    }
+
+    const updatedCar = carService.updateCar(parseInt(req.params.id, 10), updatedData);
 
     if (!updatedCar) {
         return res.status(404).json({ message: 'Carro não encontrado.' });
     }
 
-    res.status(200).json({updatedCar, message: "Carro Atualizado!"});
+    res.status(200).json(updatedCar);
 };
 
 // Deleta um carro

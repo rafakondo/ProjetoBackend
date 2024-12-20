@@ -1,7 +1,23 @@
-// Armazena a lista de aluguéis
-const rentals = [];
+const fs = require('fs');
+const path = require('path');
 
-let id = 1;
+// Caminho do arquivo JSON
+const filePath = path.join(__dirname, '../data/rental.json');
+
+// Inicializa o arquivo JSON se não existir
+if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, JSON.stringify([], null, 2));
+}
+
+// Carrega os usuários do arquivo JSON
+const rentals = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+let id = rentals.length > 0 ? Math.max(...rental.map(user => user.id)) + 1 : 1;
+
+// Salva os dados no arquivo JSON
+const saveToFile = () => {
+    fs.writeFileSync(filePath, JSON.stringify(rentals, null, 2));
+};
 
 // Retorna todos os aluguéis
 exports.getAllRentals = () => rentals;
@@ -15,6 +31,7 @@ exports.createRental = (rental) => {
     rentals.push(newRental);
 
     id++;
+    saveToFile();
 
     return newRental;
 };
@@ -30,6 +47,8 @@ exports.updateRental = (id, updatedRental) => {
     // Sobrescreve as chaves presentes em updatedRental
     rentals[index] = { ...rentals[index], ...updatedRental };
 
+    saveToFile();
+
     return rentals[index];
 };
 
@@ -41,6 +60,9 @@ exports.deleteRental = (id) => {
         return null;
     }
 
+    const deletedRental = rentals.splice(index, 1)[0];
+    saveToFile();
+
     // Retorna o aluguel deletado e o remove do array
-    return rentals.splice(index, 1)[0];
+    return deletedRental;
 };
