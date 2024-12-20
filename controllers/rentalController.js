@@ -1,4 +1,4 @@
-const rentalModel = require('../models/rentalModel');
+const rentalService = require('../services/rentalService');
 
 exports.createRental = (req, res) => {
     const { idCarro, idUser } = req.body;
@@ -7,20 +7,20 @@ exports.createRental = (req, res) => {
         return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
     }
 
-    const newRental = rentalModel.createRental({ idCarro, idUser });
+    const newRental = rentalService.createRental({ idCarro, idUser });
     res.status(201).json({newRental, message: "Aluguel Criado!"});
 };
 
 exports.getAllRentals = (req, res) => {
     const rentals = req.user.isAdmin
-        ? rentalModel.getAllRentals()
-        : rentalModel.getAllRentals().filter(rental => rental.idUser === req.user.id);
+        ? rentalService.getAllRentals()
+        : rentalService.getAllRentals().filter(rental => rental.idUser === req.user.id);
 
     res.status(200).json({rentals, message: "Listagem de todos Alugueis"});
 };
 
 exports.getRentalById = (req, res) => {
-    const rental = rentalModel.getRentalById(parseInt(req.params.id, 10));
+    const rental = rentalService.getRentalById(parseInt(req.params.id, 10));
 
     if (!rental) {
         return res.status(404).json({ message: 'Aluguel não encontrado.' });
@@ -34,7 +34,7 @@ exports.getRentalById = (req, res) => {
 };
 
 exports.updateRental = (req, res) => {
-    const rental = rentalModel.getRentalById(parseInt(req.params.id, 10));
+    const rental = rentalService.getRentalById(parseInt(req.params.id, 10));
 
     if (!rental) {
         return res.status(404).json({ message: 'Aluguel não encontrado.' });
@@ -44,12 +44,12 @@ exports.updateRental = (req, res) => {
         return res.status(403).json({ message: 'Acesso negado.' });
     }
 
-    const updatedRental = rentalModel.updateRental(parseInt(req.params.id, 10), req.body);
+    const updatedRental = rentalService.updateRental(parseInt(req.params.id, 10), req.body);
     res.status(200).json({updatedRental, message: "Aluguel Atualizado!"});
 };
 
 exports.deleteRental = (req, res) => {
-    const rental = rentalModel.getRentalById(parseInt(req.params.id, 10));
+    const rental = rentalService.getRentalById(parseInt(req.params.id, 10));
 
     if (!rental) {
         return res.status(404).json({ message: 'Aluguel não encontrado.' });
@@ -59,6 +59,6 @@ exports.deleteRental = (req, res) => {
         return res.status(403).json({ message: 'Acesso negado.' });
     }
 
-    const deletedRental = rentalModel.deleteRental(parseInt(req.params.id, 10));
+    const deletedRental = rentalService.deleteRental(parseInt(req.params.id, 10));
     res.status(200).json({deletedRental, message: "Aluguel Excluido!"});
 };
