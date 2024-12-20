@@ -12,9 +12,19 @@ exports.createCar = (req, res) => {
 };
 
 exports.getAllCars = (req, res) => {
-    const cars = carService.getAllCars();
+    const limit = parseInt(req.query.limite, 10);
+    const page = parseInt(req.query.pagina, 10);
 
-    res.status(200).json({cars, message: "Listagem de todos os Carros"});
+    if (!limit || !page) {
+        return res.status(400).json({ message: 'Os parâmetros "limite" e "página" são obrigatórios.' });
+    }
+
+    try {
+        const cars = carService.getAllCarsPaginated(limit, page);
+        res.status(200).json(cars);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 };
 
 exports.getCarById = (req, res) => {

@@ -12,11 +12,19 @@ exports.createRental = (req, res) => {
 };
 
 exports.getAllRentals = (req, res) => {
-    const rentals = req.user.isAdmin
-        ? rentalService.getAllRentals()
-        : rentalService.getAllRentals().filter(rental => rental.idUser === req.user.id);
+    const limit = parseInt(req.query.limite, 10);
+    const page = parseInt(req.query.pagina, 10);
 
-    res.status(200).json({rentals, message: "Listagem de todos Alugueis"});
+    if (!limit || !page) {
+        return res.status(400).json({ message: 'Os parâmetros "limite" e "página" são obrigatórios.' });
+    }
+
+    try {
+        const rentals = rentalService.getAllRentalsPaginated(limit, page);
+        res.status(200).json(rentals);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 };
 
 exports.getRentalById = (req, res) => {
